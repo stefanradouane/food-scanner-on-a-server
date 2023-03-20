@@ -1,0 +1,29 @@
+/* sRGB color. */
+:root {
+    --prim-color: rgb(0, 255, 0);
+    --sec-color: rgb(0, 200, 0);
+    --text-color:#f3f3f3;
+}
+
+/* Display-P3 color, when supported. */
+@supports (color: color(display-p3 1 1 1)) {
+    :root {
+        --prim-color: color(display-p3 0.2 0.902 0.2 / 1);
+        --prim-color: color(display-p3 0.2 0.702 0.2 / 1);
+    }
+}
+
+$text-color:var(--text-color);
+
+$prim-color: var(--prim-color);
+$sec-color: var(--sec-color);
+
+$dark-sec-color: #530320;
+$hover-color: #530320;
+// $sec-color: rgb(10, 100, 251);
+
+$black-color: #000;
+$white-color: #fff;
+
+$grey-color: #E5E5E5;
+$dark-grey-color: #202124;

@@ -1,0 +1,110 @@
+@import '../../node_modules/microscope-sass/lib/typography';
+
+.barcode{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(100%);
+    transition: 300ms all;
+    inset: 52px 0 0 0;
+    height: calc(100dvh - 52px);
+    width: 100%;
+    border: none;
+    padding: 20px;
+    background-color: $dark-grey-color;
+    gap: 10px;
+    
+    &[aria-expanded="true"]{
+        transform: translateX(0);
+    }
+    &__video{
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        max-width: 320px;
+        aspect-ratio: 350 / 262.50;
+        z-index: -1;
+        background-color: transparent;
+        
+        source{
+            background-color: transparent;
+        }
+    }
+
+    canvas{
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        aspect-ratio: 350 / 262.50;
+        background-color: transparent;
+    }
+
+    &__control {
+        cursor: pointer;
+        display: flex;
+        @include h2;
+        gap: 10px;
+        font-size: 20px;
+        align-items: center;
+        background-color: $sec-color;
+        border: none;
+        
+        &--sec{
+            background-color: rgba($color: #00ff00, $alpha: .5); //fixme :(ugly)
+        }
+
+        &--pageclose{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 52px;
+            width: 52px;
+        }
+
+        &--redirect#redirect{
+            display: none;
+            @include mobile-only{
+                margin-top: auto;
+            }
+        }
+
+        &--start{
+            @include mobile-only{
+                margin-top: auto;
+            }
+
+            &.barcode__control--sec{
+                margin-top: unset;
+            }
+        }
+        
+        .icon{
+            width: 20px;
+        }
+
+        span{
+            font:inherit;
+        }
+    }
+
+    &__observer{
+        position: relative;
+    }
+
+    &__display{
+        border:2px solid $prim-color;
+
+        &--overlay{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    .support{
+        order: 2;
+    }
+}

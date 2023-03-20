@@ -1,0 +1,21 @@
+@import '../../node_modules/microscope-sass/lib/typography';
+
+.title{
+    text-transform: uppercase;
+    max-width: 1272px;
+    
+    &--h1{
+        @include h1;
+        color: var(--prim-color);
+    }
+
+    &--h2{
+        @include h2;
+        color: $text-color;
+    }
+    &--h3{
+        @include h3;
+        color: $text-color;
+
+    }
+}
