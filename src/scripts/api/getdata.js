@@ -8,7 +8,7 @@
 export const getData = (type, query, page, pageSize) => {
     // Return the API endpoint with the variables
     const apiEndpoint = (type, query, page, pageSize) => {
-        if(type == "detail") {
+        if (type == "detail") {
             return `https://nl.openfoodfacts.org/api/v0/product/${query}.json`
 
         } else if (type == "all") {
@@ -17,11 +17,13 @@ export const getData = (type, query, page, pageSize) => {
     }
 
     // Fetch data from the API
-    const fetchExec = async (atype, hoi, page, pageSize) => {
-        const response = await fetch(apiEndpoint(atype, hoi, page, pageSize));
+    const fetchExec = async (type, query, page, pageSize) => {
+        const response = await fetch(apiEndpoint(type, query, page, pageSize));
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
+
+        console.log(response)
 
         return await response.json();
     }

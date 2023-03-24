@@ -1,4 +1,3 @@
-console.log("hallo wereldje")
 /*******************************************************
  * Define some constants and variables
  ********************************************************/
@@ -21,6 +20,7 @@ app.use(express.static("./public"));
  * Set template engine
  ********************************************************/
 app.set("view engine", "ejs");
+app.set('views', 'views', );
 
 /*******************************************************
  * Routes

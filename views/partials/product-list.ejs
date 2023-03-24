@@ -1,0 +1,8 @@
+<%- include('../components/count', {count:data.count}); %>
+<section class="search__results" data-loaded="true">
+    <% data.products.forEach(product => { %>
+    <%- include('../partials/product', {product:product}); %>
+    <% }) %>
+    <div class="icon icon--loading icon--loading-results"></div>
+</section>
+<%- include('../components/paginator', {query:query, count:data.count, pageCount:pageCount, page:page}); %>

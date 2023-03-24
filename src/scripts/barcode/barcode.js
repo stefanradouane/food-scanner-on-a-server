@@ -34,9 +34,9 @@ class barcodeScanner {
 			}
 		})
 
-		this.disCloser().addEventListener("click", () => {
-			this.node.ariaExpanded = "true";
-		})
+		// this.disCloser().addEventListener("click", () => {
+		// 	this.node.ariaExpanded = "true";
+		// })
 
 		this.pageCloser().addEventListener("click", () => {
 			barcodeContainer[0].ariaExpanded = "false"
@@ -117,8 +117,9 @@ class barcodeScanner {
 
 						// Open detailpage on click
 						this.controlRedirect().addEventListener("click", () => {
-							this.node.ariaExpanded = "false"
-							detailPage(this.controlRedirect().value)
+							// this.node.ariaExpanded = "false"
+							this.controlRedirect().href = `/producten/${this.controlRedirect().value}`
+							// detailPage(this.controlRedirect().value)
 						})
 					}
 				})

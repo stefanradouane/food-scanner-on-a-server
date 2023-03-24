@@ -84,7 +84,9 @@ class Search {
             this.fetchData(false, false, false)
         } else {
             // Fetch data
-            this.fetchData(false, true, false)
+            if (this.searchContainer().dataset.loaded !== "true") {
+                this.fetchData(false, true, false)
+            }
         }
     }
 
@@ -267,5 +269,5 @@ class Search {
 
 // Start!
 if (searchForm) {
-    [...searchForm].forEach(form => new Search(form))
+    // [...searchForm].forEach(form => new Search(form))
 }

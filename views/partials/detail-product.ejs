@@ -1,0 +1,92 @@
+<dialog class="detailpage" aria-expanded="true">
+    <% if (data.product) { %>
+    <section>
+        <img width="100%" class="detailpage__image"
+            src="<%- (data.product?.image_front_url && data.product?.image_front_url) || "/assets/images/eaten-apple.png" %>"
+            alt="product-foto" />
+        <section class="detailpage__content">
+            <h2 class="detailpage__title title title--h2"><%- data.product?.product_name %></h2>
+            <h2 class="detailpage__brand title title--h3"><%- data.product.brands %></h2>
+            <p class="detailpage__quantity"><%- data.product.quantity %></p>
+            <p class="detailpage__ingredients">
+                <%- data.product.ingredients_text_nl ? data.product.ingredients_text_nl : data.product.ingredients_text_en ? data.product.ingredients_text_en : data.product.ingredients_text %>
+            </p>
+            <p class="detailpage__allergens"><%- data.product.allergens_hierarchy %></p>
+            <p class="detailpage__countries"><%- data.product.countries_hierarchy %></p>
+            <section class="detailpage__protein">
+                <img src="/assets/images/protein.png" class="detailpage__protein-image" />
+                <p class="detailpage__protein-score">
+                    <% if (isNaN(data.product.nutriments.proteins_100g)) { %>
+                    Eiwitten onbekend
+                    <% } else { %>
+                    <%- (Math.round(data.product.nutriments.proteins_100g * 10) / 10) %>
+                    <%- data.product.nutriments.proteins_unit %> eiwitten / 100
+                    <%-data.product.nutriments.proteins_unit%>
+                    <% } %>
+                </p>
+            </section>
+            <section class="detailpage__scores">
+                <img class="detailpage__nutriscore" alt="Nutriment score"
+                    src="https://static.openfoodfacts.org/images/attributes/nutriscore-<%- data.product.nutriscore_grade ? data.product.nutriscore_grade : "unknown" %>.svg" />
+                <img class="detailpage__novascore" alt="Nova score"
+                    src="https://static.openfoodfacts.org/images/attributes/nova-group-<%- data.product.nova_group ? data.product.nova_group : "unknown" %>.svg" />
+                <img class="detailpage__ecoscore" alt="Eco score"
+                    src="https://static.openfoodfacts.org/images/attributes/ecoscore-<%- data.product.ecoscore_grade ? data.product.ecoscore_grade : "unknown" %>.svg" />
+            </section>
+            <p class="detailpage__barcode"><%- data.product._id %></p>
+        </section>
+        <table class="detailpage__table">
+            <tbody>
+                <tr>
+                    <td>Voedingswaarden</td>
+                    <td>100g</td>
+                    <td><%- data.product.serving_size %></td>
+                </tr>
+                <tr>
+                    <td>Energie</td>
+                    <td><%- data.product.serving_size %> kJ / 539 kcal</td>
+                    <td>338 kJ / 80.8 kcal</td>
+                </tr>
+                <tr>
+                    <td>Vetten</td>
+                    <td>30.9 g</td>
+                    <td>4.63 g</td>
+                </tr>
+                <tr>
+                    <td>Koolhydraten</td>
+                    <td>57.5 g</td>
+                    <td>8.62 g</td>
+                </tr>
+                <tr>
+                    <td>Suiker</td>
+                    <td>56.3 g</td>
+                    <td>8.44 g</td>
+                </tr>
+                <tr>
+                    <td>Eiwitten</td>
+                    <td>6.3 g</td>
+                    <td>0.945 g</td>
+                </tr>
+                <tr>
+                    <td>Zout</td>
+                    <td>0.107 g</td>
+                    <td>0.016 g</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <% } else { %>
+    <section>
+        <h3>Product niet gevonden :O</h3>
+        <p>Probeer een ander product</p>
+        <a href="/producten">Terug naar alle andere producten</a>
+    </section>
+    <% } %>
+
+    <a href="/producten" class="detailpage__control">
+        <svg class="icon icon--cross" viewBox="0 0 91 91" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M1.90147 1.98266C3.11935 0.765153 4.77093 0.0811917 6.49301 0.0811917C8.21509 0.0811917 9.86667 0.765153 11.0845 1.98266L45.4594 36.3575L79.8343 1.98266C80.4333 1.36238 81.15 0.867625 81.9423 0.52726C82.7346 0.186895 83.5868 0.00773855 84.4492 0.000245209C85.3115 -0.00724813 86.1667 0.15707 86.9648 0.483614C87.7629 0.810158 88.4881 1.29239 89.0978 1.90216C89.7076 2.51194 90.1898 3.23705 90.5164 4.03519C90.8429 4.83333 91.0072 5.68851 90.9998 6.55083C90.9923 7.41315 90.8131 8.26535 90.4727 9.05769C90.1324 9.85003 89.6376 10.5667 89.0173 11.1657L54.6425 45.5406L89.0173 79.9154C90.2003 81.1403 90.8549 82.7808 90.8401 84.4836C90.8253 86.1864 90.1423 87.8153 88.9382 89.0194C87.7341 90.2235 86.1052 90.9065 84.4024 90.9213C82.6996 90.9361 81.0591 90.2815 79.8343 89.0985L45.4594 54.7237L11.0845 89.0985C9.85969 90.2815 8.21919 90.9361 6.51638 90.9213C4.81357 90.9065 3.1847 90.2235 1.98058 89.0194C0.776469 87.8153 0.093458 86.1864 0.0786611 84.4836C0.0638641 82.7808 0.718466 81.1403 1.90147 79.9154L36.2763 45.5406L1.90147 11.1657C0.683961 9.94786 0 8.29628 0 6.5742C0 4.85212 0.683961 3.20054 1.90147 1.98266Z" />
+        </svg>
+    </a>
+</dialog>

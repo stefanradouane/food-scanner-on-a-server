@@ -14,7 +14,8 @@
 export const searchResults = (data) => {
     const results = data.map(product => {
         // Create the item container with the className "result" and a data-id of the "product-id"
-        const itemContainer = document.createElement("section");
+        const itemContainer = document.createElement("a");
+        itemContainer.href = `/producten/${product._id}`
         itemContainer.classList.add("result")
         itemContainer.dataset.id = product._id
 
@@ -34,7 +35,7 @@ export const searchResults = (data) => {
         // Image
         resultImg.classList.add("result__image")
         resultImg.setAttribute("loading", "lazy")
-        resultImg.src = product.image_front_url ? product.image_front_url : "assets/images/eaten-apple.png"
+        resultImg.src = product.image_front_url ? product.image_front_url : "/assets/images/eaten-apple.png"
 
         // Nutriscore
         resultNutriScore.classList.add("result__nutriscore")
@@ -45,7 +46,7 @@ export const searchResults = (data) => {
 
         // Make protein section        
         const proteinIcon = document.createElement("img")
-        proteinIcon.src = "assets/images/protein.png"
+        proteinIcon.src = "/assets/images/protein.png"
         proteinIcon.classList.add("result__protein-image")
 
         const proteinText = document.createElement("p")

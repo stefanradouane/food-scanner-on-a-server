@@ -1,0 +1,18 @@
+<a class="result" data-id="<%- product._id %>" href="/producten/<%- product._id %>">
+    <h2 class="result__title title title--h3"><%- product.product_name %></h2>
+    <img class="result__image" loading="lazy"
+        src="<%- product.image_front_url ? product.image_front_url : "assets/images/eaten-apple.png" %>">
+    <section class="result__protein">
+        <img src="assets/images/protein.png" class="result__protein-image">
+        <p class="result__protein-score">
+            <% if (isNaN(product.nutriments.proteins_100g)) { %>
+            Eiwitten onbekend
+            <% } else { %>
+            <%- (Math.round(product.nutriments.proteins_100g * 10) / 10) %>
+            <%- product.nutriments.proteins_unit %> eiwitten / 100 <%-product.nutriments.proteins_unit%>
+            <% } %>
+        </p>
+    </section>
+    <img class="result__nutriscore"
+        src="https://static.openfoodfacts.org/images/attributes/nutriscore-<%- product.nutriscore_grade ? product.nutriscore_grade : "unknown" %>.svg">
+</a>

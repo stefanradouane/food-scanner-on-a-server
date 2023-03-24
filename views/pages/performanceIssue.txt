@@ -1,0 +1,7 @@
+<% if (data != undefined) { %>
+                <% data.products.forEach(product => { %>
+                <%- include('../partials/product', {product:product}); %>
+                <% }) %>
+
+                <% } else { %>
+                    <% } %>

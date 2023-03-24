@@ -1,20 +1,20 @@
-.paginator{
+.paginator {
     display: flex;
     gap: 5px;
     margin: auto;
-    
-    @include laptop{
+
+    @include laptop {
         margin: 16px auto 0;
     }
 
-    &__control{
+    &__control {
         transition: 300ms all;
         cursor: pointer;
-        padding:0;
+        padding: 0;
         width: 27px;
-        aspect-ratio: 1/1;  
-        border-radius: 50%; 
-        border: 1px solid $prim-color;  
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        border: 1px solid $prim-color;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -23,35 +23,41 @@
         color: $white-color;
         font-size: 12px;
 
-        @include breakpoint(400px){
+        @include breakpoint(400px) {
             font-size: 14px;
             width: 32.5px;
         }
 
 
-        
-        &--active{
+
+        &--active {
             background: $prim-color;
             color: $black-color;
         }
 
-        .icon{
+
+        &--hidden {
+            display: none;
+        }
+
+        .icon {
             fill: $white-color;
         }
 
-        &[disabled]{
+        &[disabled] {
             cursor: default;
-            .icon{
+
+            .icon {
                 fill: $black-color;
             }
 
-            &:hover{
+            &:hover {
                 background-color: inherit;
                 color: inherit;
             }
         }
 
-        &:hover{
+        &:hover {
             background-color: $sec-color;
             color: $black-color;
         }

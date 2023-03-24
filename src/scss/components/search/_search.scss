@@ -34,18 +34,22 @@
         grid-template-columns: minmax(0, 1fr);
         gap: 20px;
 
+        &-body {
+            display: contents;
+        }
+
         @include breakpoint(550px) {
-            grid-template-columns: repeat(2, minmax(auto, 1fr));            
+            grid-template-columns: repeat(2, minmax(auto, 1fr));
         }
-        
-        
-        @include laptop{
+
+
+        @include laptop {
             gap: 25px;
-            grid-template-columns: repeat(3, minmax(auto, 1fr));            
+            grid-template-columns: repeat(3, minmax(auto, 1fr));
         }
-        
-        @include desktop{
-            gap: 35px;        
+
+        @include desktop {
+            gap: 35px;
         }
     }
 
