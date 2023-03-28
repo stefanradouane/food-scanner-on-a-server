@@ -3,7 +3,7 @@ import { flag } from 'country-emoji';
 
 const detailpage = document.querySelector('.detailpage');
 
-const detailPage = () => {
+export const detailPage = () => {
   // Select elements
   const detailPageCountries = document.querySelector('.detailpage__countries');
   const detailPageTable = document.querySelector('.detailpage__table');

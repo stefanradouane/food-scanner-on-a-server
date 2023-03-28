@@ -8,6 +8,8 @@ const searchInput = document.querySelector('[data-search-input]');
 function newSearch() {
   const onInput = debounce((e) => {
     search.classList.add('search--loading');
+    const oldSection = document.querySelector('.search__results-body');
+    oldSection.classList.add('search__results-body--hidden');
     const query = searchInput.value;
 
     // Check if a query is made
@@ -31,22 +33,26 @@ function newSearch() {
         return res.text();
       })
       .then((html) => {
-        const oldSection = document.querySelector('.search__results-body');
-        oldSection.innerHTML = html;
-        search.classList.remove('search--loading');
-        paginatorListener();
+        const prom = new Promise((resolve, reject) => {
+          resolve((oldSection.innerHTML = html));
+        });
+        prom.then((data) => {
+          setTimeout(() => {
+            search.classList.remove('search--loading');
+            paginatorListener();
+            oldSection.classList.remove('search__results-body--hidden');
+          }, 75);
+        });
+        return html;
       })
       .catch((err) => {
         console.log(err);
+        search.classList.remove('search--loading');
         const oldSection = document.querySelector('.search__results-body');
         oldSection.innerHTML =
           '<h1 class=title title--h1>An internet error occured</h1>';
       });
   }, 250);
-
-  // const onPaginator = (e) => {
-  //     e.preventDefault()
-  // }
 
   document
     .querySelector('[data-search-form]')
@@ -68,11 +74,8 @@ function newSearch() {
     document.querySelectorAll('.paginator__control').forEach((control) => {
       control.addEventListener('click', (e) => {
         onInput(e);
-        // e.preventDefault()
       });
     });
-
-    // console.log(searchPaginatorControls)
   }
 
   paginatorListener();

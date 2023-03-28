@@ -1,0 +1,122 @@
+.header {
+  view-transition-name: main-header;
+  contain: paint;
+}
+
+.search__results {
+  view-transition-name: content;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-to-left {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-to-left-again {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+::view-transition-old(root) {
+  animation: 300ms cubic-bezier(0, 0, 0.2, 1) 0ms both slide-to-left-again;
+}
+::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0, 0, 0.2, 1) 0ms both slide-to-left;
+}
+
+::view-transition-old(content) {
+  animation: 300ms cubic-bezier(0, 0, 0.2, 1) 0ms both slide-to-left-again;
+}
+::view-transition-new(content) {
+  animation: 300ms cubic-bezier(0, 0, 0.2, 1) 0ms both slide-to-left,
+    200ms cubic-bezier(0, 0, 0.2, 1) 100ms both fade-in;
+}
+
+// //300ms cubic-bezier(0.4, 0, 1, 1) both fade-out
+
+// ::view-transition-new(root) {
+//   animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+//   //   210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+// // }
+
+// ::view-transition-old(test) {
+//   animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms both slide-to-right;
+//   //   animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+//   //   210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+// }
+
+// ::view-transition-new(test) {
+//   animation: 300ms cubic-bezier(0, 0, 0.2, 1) 0ms both slide-to-left;
+// }
+
+// ::view-transition-old(page) {
+//   animation: 90ms cubic-bezier(0.4, 0, 1, 1) 0ms both fade-out;
+//   //   210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+// }
+// ::view-transition-new(page) {
+//   animation: 1s cubic-bezier(0, 0, 0.2, 1) 0ms both fade-in;
+// }
+
+// ::view-transition-old(banner-img),
+// ::view-transition-new(banner-img) {
+//   animation: none;
+//   mix-blend-mode: normal;
+//   height: 100%;
+//   overflow: clip;
+// }
+
+// ::view-transition-image-pair(banner-img) {
+//   isolation: none;
+// }
+
+// .product-page-to-list::view-transition-old(banner-img) {
+//   object-fit: contain;
+// }
+
+// .product-page-to-list::view-transition-new(banner-img) {
+//   object-fit: cover;
+// }
+
+// .list-page-to-product::view-transition-old(banner-img) {
+//   object-fit: cover;
+// }
+
+// .list-page-to-product::view-transition-new(banner-img) {
+//   object-fit: contain;
+// }
+
+// .page {
+//   //   view-transition-name: page;
+// }
+
+// .barcode {
+//   //   view-transition-name: test;
+//   //   z-index: 10;
+// }
+
+// .detailpage {
+//   // view-transition-name: detail;
+//   //   z-index: 10;
+// }
+
+// .result__image {
+//   //   contain: paint;
+// }
+
+// .detailpage__image {
+//   //   view-transition-name: banner-image;
+// }

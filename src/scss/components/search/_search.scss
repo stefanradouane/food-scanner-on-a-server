@@ -40,6 +40,15 @@
 
     &-body {
       display: contents;
+
+      .search__results a {
+        transition: all 300ms;
+        opacity: 1;
+      }
+
+      &--hidden .search__results a {
+        opacity: 0;
+      }
     }
 
     @include breakpoint(550px) {

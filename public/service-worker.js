@@ -23,6 +23,14 @@ const CORE_CACHE_ARRAY = [
     name: `pages-${CORE_CACHE_VERSION}`,
     urls: ['/', '/barcode', '/offline'],
   },
+  {
+    name: `partials-${CORE_CACHE_VERSION}`,
+    urls: [],
+  },
+  {
+    name: `web-images-${CORE_CACHE_VERSION}`,
+    urls: [],
+  },
 ];
 
 let cacheNames = CORE_CACHE_ARRAY.map((cache) => cache.name);
@@ -72,25 +80,55 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   // console.log(e.request.headers.get('accept'));
   if (isHtmlGetRequest(e.request)) {
+    console.log(url);
     e.respondWith(
       caches
         .open(`pages-${CORE_CACHE_VERSION}`)
         .then((cache) => cache.match(e.request.url))
-        .then((response) =>
-          response
-            ? response
-            : fetchAndCache(e.request, `pages-${CORE_CACHE_VERSION}`)
-        )
         .then((response) => {
-          // Fetch new page version
-          fetchAndCache(e.request, `pages-${CORE_CACHE_VERSION}`);
+          return response
+            ? response
+            : fetchAndCache(
+                url.href.replace('&async=true', ''),
+                `pages-${CORE_CACHE_VERSION}`
+              );
+        })
+        .then((response) => {
+          // Fetch default partial for no JS UX
+          // Fetch only /producten partials.
+          if (url.pathname.endsWith('/producten')) {
+            fetchAndCache(
+              url.pathname + url.search + '&async=true',
+              `partials-${CORE_CACHE_VERSION}`
+            );
+          }
           return response;
         })
         .catch((err) => {
+          // Show partial
           return caches
             .open(`pages-${CORE_CACHE_VERSION}`)
             .then((cache) => cache.match('/offline'));
         })
+
+      // caches
+      //   .open(`pages-${CORE_CACHE_VERSION}`)
+      //   .then((cache) => cache.match(e.request.url))
+      //   .then((response) =>
+      //     response
+      //       ? response
+      //       : fetchAndCache(e.request, `pages-${CORE_CACHE_VERSION}`)
+      //   )
+      //   .then((response) => {
+      //     // Fetch new page version
+      //     fetchAndCache(e.request, `pages-${CORE_CACHE_VERSION}`);
+      //     return response;
+      //   })
+      //   .catch((err) => {
+      //     return caches
+      //       .open(`pages-${CORE_CACHE_VERSION}`)
+      //       .then((cache) => cache.match('/offline'));
+      //   })
     );
   } else if (isImageGetRequest(e.request)) {
     e.respondWith(
@@ -100,6 +138,8 @@ self.addEventListener('fetch', (e) => {
         .then((response) => response)
     );
   } else if (isFileGetRequest(e.request)) {
+    console.log('file requested' + e.request.url);
+
     e.respondWith(
       caches
         .open(`files-${CORE_CACHE_VERSION}`)
@@ -127,31 +167,66 @@ self.addEventListener('fetch', (e) => {
         })
     );
   } else if (e.request.headers.get('accept') == '*/*') {
+    console.log('other requested' + e.request.url);
     const path = url.pathname + url.search;
     const href = url.href;
     const usedHref = href.replace('&async=true', '');
 
-    e.respondWith(
-      caches
-        .open(`partials-${CORE_CACHE_VERSION}`)
-        .then((cache) => cache.match(path))
-        .then((response) => {
-          return response
-            ? response
-            : fetchAndCache(path, `partials-${CORE_CACHE_VERSION}`);
-        })
-        .then((response) => {
-          // Fetch default page for no JS UX
-          fetchAndCache(usedHref, `pages-${CORE_CACHE_VERSION}`);
-          return response;
-        })
-        .catch((err) => {
-          // Show partial
-          return caches
-            .open(`assets-${CORE_CACHE_VERSION}`)
-            .then((cache) => cache.match('/assets/images/eaten-apple.png'));
-        })
-    );
+    if (url.search.includes('&async=true')) {
+      // Handle partial
+      e.respondWith(
+        caches
+          .open(`partials-${CORE_CACHE_VERSION}`)
+          .then((cache) => cache.match(path))
+          .then((response) => {
+            return response
+              ? response
+              : fetchAndCache(href, `partials-${CORE_CACHE_VERSION}`);
+          })
+          .then((response) => {
+            // Fetch default page for no JS UX
+            fetchAndCache(usedHref, `pages-${CORE_CACHE_VERSION}`);
+            return response;
+          })
+          .catch((err) => {
+            return err;
+            // Show partial offline
+            // return `<h1 class="title title--h1">An internet error occured</h1>`;
+          })
+      );
+    } else {
+      // Handle page
+      e.respondWith(
+        caches
+          .open(`pages-${CORE_CACHE_VERSION}`)
+          .then((cache) => cache.match(path))
+          .then((response) => {
+            return response
+              ? response
+              : fetchAndCache(usedHref, `pages-${CORE_CACHE_VERSION}`);
+          })
+          .then((response) => {
+            // Fetch default page for no JS UX
+            // Fetch only /producten partials.
+            if (url.pathname.endsWith('/producten')) {
+              fetchAndCache(
+                href + '&async=true',
+                `partials-${CORE_CACHE_VERSION}`
+              );
+            }
+            return response;
+          })
+          .catch((err) => {
+            // Show partial
+            return caches
+              .open(`pages-${CORE_CACHE_VERSION}`)
+              .then((cache) => cache.match('/offline'));
+          })
+      );
+    }
+    console.log(url);
+  } else {
+    console.log(e.request);
   }
 });
 
@@ -170,16 +245,11 @@ function requestType(request) {
 
 function isImageGetRequest(request) {
   return CORE_CACHE_ARRAY.map((object) => {
-    // console.log(object);
-    // console.log(request.destination);
     if (
       object.name == `assets-${CORE_CACHE_VERSION}` &&
       request.method === 'GET' &&
       object.urls.includes(getPathName(request.url))
     ) {
-      if (request.destination == 'audio') {
-        // console.log(object.name);
-      }
       return true;
     } else {
       return false;
@@ -188,12 +258,10 @@ function isImageGetRequest(request) {
 }
 
 function fetchAndCache(request, cacheName) {
-  console.log(request);
   return fetch(request).then((response) => {
     if (!response.ok) {
       throw new TypeError('Bad response status');
     }
-
     const clone = response.clone();
     caches.open(cacheName).then((cache) => cache.put(request, clone));
     return response;
@@ -207,7 +275,6 @@ function isFileGetRequest(request) {
       request.method === 'GET' &&
       object.urls.includes(getPathName(request.url))
     ) {
-      // console.log(request);
       return true;
     } else {
       return false;
@@ -264,27 +331,19 @@ function getPathName(requestUrl) {
 }
 
 function fetchAndCacheImage(url, cacheName) {
-  const headers = new Headers();
-  // headers.append('Access-Control-Allow-Origin', '*');
-  // headers.append('Access-Control-Allow-Origin', 'http://localhost');
-  return fetch(url, headers).then((response) => {
-    if (response.status === 200) {
-      return response.blob().then((blob) => {
-        console.log(blob);
-        return createWebp(blob).then((webpBlob) => {
-          const newRes = new Response(webpBlob, {
-            'Content-Type': 'image/webp',
-          });
-          // console.log(newRes.blob());
-          return caches.open(cacheName).then(function (cache) {
-            cache.put(url, newRes.clone());
-            return newRes;
-          });
+  return fetch(url, {}).then((response) => {
+    return response.blob().then((blob) => {
+      return createWebp(blob).then((webpBlob) => {
+        const newRes = new Response(webpBlob, {
+          'Content-Type': 'image/webp',
+        });
+        // console.log(newRes.blob());
+        return caches.open(cacheName).then(function (cache) {
+          cache.put(url, newRes.clone());
+          return newRes;
         });
       });
-    } else {
-      throw new Error('Could not fetch image');
-    }
+    });
   });
 }
 

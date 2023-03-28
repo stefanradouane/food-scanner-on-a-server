@@ -4,8 +4,8 @@
   href="/producten/<%- product._id %>"
 >
   <h2 class="result__title title title--h3"><%- product.product_name %></h2>
-  <img class="result__image" loading="lazy" src="<%- product.image_front_url ?
-  product.image_front_url : "assets/images/eaten-apple.png" %>">
+  <img class="result__image" loading="lazy" src="<%- product.image_url ?
+  product.image_url : "assets/images/eaten-apple.png" %>">
   <section class="result__protein">
     <img src="assets/images/protein.png" class="result__protein-image" />
     <p class="result__protein-score">

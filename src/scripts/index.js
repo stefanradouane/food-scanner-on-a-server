@@ -1,5 +1,5 @@
 import './barcode/';
 // import "./home/";
-// import "./search/";
+import './view-transition/';
 import './newSearch/';
 import './detailpage/';
