@@ -1,5 +1,5 @@
-// import "./barcode/";
+import './barcode/';
 // import "./home/";
 // import "./search/";
-import "./newSearch/";
-import "./detailpage/";
+import './newSearch/';
+import './detailpage/';

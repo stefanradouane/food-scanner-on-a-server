@@ -4,19 +4,18 @@
  * @param {String} id
  */
 export const setUrl = (query, page) => {
-  if (query && page == null || query && page == 1) {
-    history.replaceState({}, '', '/producten?query=' + query)
+  if ((query && page == null) || (query && page == 1)) {
+    history.replaceState({}, '', '/producten?query=' + query);
   } else if (query && page) {
-    history.replaceState({}, '', '/producten?query=' + query + '&page=' + page)
+    history.replaceState({}, '', '/producten?query=' + query + '&page=' + page);
   } else if (query) {
-    history.replaceState({}, '', '/producten?query=' + query)
+    history.replaceState({}, '', '/producten?query=' + query);
   } else if (page !== null) {
-    history.replaceState({}, '', '/producten?page=' + page)
+    history.replaceState({}, '', '/producten?page=' + page);
   } else {
-    history.replaceState({}, '', '/producten')
+    history.replaceState({}, '', '/producten');
   }
 };
-
 
 /**
  * Returns params based on query string.

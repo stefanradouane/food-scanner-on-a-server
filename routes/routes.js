@@ -12,6 +12,7 @@ router.get('/', controller.control_index);
 router.get('/producten', controller.control_listview);
 router.get('/producten/:barcode', controller.control_detailview);
 router.get('/barcode', controller.control_barcode);
+router.get('/offline', controller.control_offline);
 
 /*******************************************************
  * Create POST router

@@ -1,4 +1,16 @@
 <script src="/dist/scripts/main.js"></script>
-</body>
 
+<script>
+    // Check if serviceWorker is availible
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registation) => {
+        return registation.update();
+      });
+  });
+}
+</script>
+</body>
 </html>
