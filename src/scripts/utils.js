@@ -1,6 +1,7 @@
 const search = document.querySelector('[data-search]');
 
 export function getPageContent(url) {
+  console.log(url);
   return fetch(url).then((res) => res.text());
 }
 

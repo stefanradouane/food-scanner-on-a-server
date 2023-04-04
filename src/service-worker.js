@@ -2,7 +2,7 @@ const CORE_CACHE_VERSION = 'v1';
 const CORE_CACHE_ARRAY = [
   {
     name: `files-${CORE_CACHE_VERSION}`,
-    urls: ['/manifest.json', '/dist/css/all-27fb86bbda.css', '/dist/scripts/main-e9f11ddc4e.js'],
+    urls: ['/manifest.json', '/dist/css/all.css', '/dist/scripts/main.js'],
   },
   {
     name: `assets-${CORE_CACHE_VERSION}`,

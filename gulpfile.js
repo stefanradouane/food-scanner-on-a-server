@@ -49,14 +49,12 @@ function concatCss() {
     .pipe(dest(paths.styles.dest));
 }
 
-async function watchTask() {
-  watch(['src/scss/*.scss'], series(style, concatCss));
-  watch(['src/scss/*/*.scss'], series(style, concatCss));
-  watch(['src/scss/*/*/*.scss'], series(style, concatCss));
-}
+// async function watchTask() {
+//   watch(['src/scss/*.scss'], series(style, concatCss));
+//   watch(['src/scss/*/*.scss'], series(style, concatCss));
+//   watch(['src/scss/*/*/*.scss'], series(style, concatCss));
+// }
 
-exports.watch = watchTask;
+// exports.watch = watchTask;
 
-exports.default = parallel(
-  series(style, concatCss),
-);
+exports.default = parallel(series(style, concatCss));

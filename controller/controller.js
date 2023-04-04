@@ -1,7 +1,9 @@
 const api = require('../api/api');
+const revManifest = require('../public/rev-manifest.json');
 
+console.log(revManifest);
 const control_index = async (req, res) => {
-  res.render('pages/home');
+  res.render('pages/home', { revManifest: revManifest });
 };
 
 const control_listview = (req, res) => {
@@ -32,6 +34,7 @@ const control_listview = (req, res) => {
           page: page,
           pageSize: pageSize,
           pageCount: pageCount,
+          revManifest,
         });
       }
     })
@@ -46,6 +49,7 @@ const control_detailview = (req, res) => {
     .then((data) => {
       res.render('pages/detail', {
         data: data,
+        revManifest,
       });
     })
     .catch((err) => {
@@ -54,11 +58,11 @@ const control_detailview = (req, res) => {
 };
 
 const control_barcode = (req, res) => {
-  res.render('pages/barcode');
+  res.render('pages/barcode', { revManifest });
 };
 
 const control_offline = (req, res) => {
-  res.render('pages/offline');
+  res.render('pages/offline', { revManifest });
 };
 
 module.exports = {

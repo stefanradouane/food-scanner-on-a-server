@@ -1,10 +1,8 @@
 /*******************************************************
  * Define some constants and variables
  ********************************************************/
-
 const express = require('express');
-let ejs = require('ejs');
-const cors = require('cors');
+const compression = require('compression');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -14,6 +12,14 @@ const routes = require('./routes/routes');
 /*******************************************************
  * Middleware
  ********************************************************/
+app.use(compression());
+
+// Regex must be [filename]-[uuid].[source]
+app.use(/.*\..*/, (req, res, next) => {
+  res.setHeader('Cache-Control', 'max-age=365000000, immutable');
+  next();
+});
+
 app.use(express.static('./public'));
 
 /*******************************************************
@@ -21,7 +27,6 @@ app.use(express.static('./public'));
  ********************************************************/
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-app.use(cors({ origin: 'http://localhost' }));
 
 /*******************************************************
  * Routes

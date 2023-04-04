@@ -20,10 +20,8 @@ export const detailPage = () => {
 
   // Make alergie list
   function allergieList(list) {
-    let returnedValue = 'Allergenen: ';
-    if (list.length == 0) {
-      returnedValue += 'Geen';
-    } else {
+    if (list.length <= 1) {
+      let returnedValue = 'Allergenen: ';
       list.forEach((item, i, all) => {
         const words = item.split(':');
         if (all.length - 1 == i) {
@@ -44,8 +42,9 @@ export const detailPage = () => {
             ' ';
         }
       });
+      return returnedValue;
     }
-    return returnedValue;
+    return '';
   }
 
   // Make an emoji list for the countries

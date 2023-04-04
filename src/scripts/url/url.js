@@ -17,6 +17,8 @@ export const setUrl = (query, page) => {
   }
 };
 
+console.log('hello');
+
 /**
  * Returns params based on query string.
  * @param {string} query A (serialized) query string.
