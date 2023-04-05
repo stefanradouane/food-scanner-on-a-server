@@ -2,21 +2,25 @@ const CORE_CACHE_VERSION = 'v1';
 const CORE_CACHE_ARRAY = [
   {
     name: `files-${CORE_CACHE_VERSION}`,
-    urls: ['/manifest.json', '/dist/css/all-27fb86bbda.css', '/dist/scripts/main-b79ca447d3.js'],
+    urls: [
+      '/public/manifest.json',
+      '/public/dist/css/all-27fb86bbda.css',
+      '/public/dist/scripts/main-b79ca447d3.js',
+    ],
   },
   {
     name: `assets-${CORE_CACHE_VERSION}`,
     urls: [
-      '/assets/sounds/scan.wav',
-      '/assets/images/protein.png',
-      '/assets/images/eaten-apple.png',
-      '/assets/icon/icon-256x256.png',
-      '/assets/images/nutriscore/nutriscore-a.svg',
-      '/assets/images/nutriscore/nutriscore-b.svg',
-      '/assets/images/nutriscore/nutriscore-c.svg',
-      '/assets/images/nutriscore/nutriscore-d.svg',
-      '/assets/images/nutriscore/nutriscore-e.svg',
-      '/assets/images/nutriscore/nutriscore-unknown.svg',
+      '/public/assets/sounds/scan.wav',
+      '/public/assets/images/protein.png',
+      '/public/assets/images/eaten-apple.png',
+      '/public/assets/icon/icon-256x256.png',
+      '/public/assets/images/nutriscore/nutriscore-a.svg',
+      '/public/assets/images/nutriscore/nutriscore-b.svg',
+      '/public/assets/images/nutriscore/nutriscore-c.svg',
+      '/public/assets/images/nutriscore/nutriscore-d.svg',
+      '/public/assets/images/nutriscore/nutriscore-e.svg',
+      '/public/assets/images/nutriscore/nutriscore-unknown.svg',
     ],
   },
   {
