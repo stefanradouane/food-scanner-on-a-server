@@ -111,3 +111,5 @@ DS_Store/
 ## Public folder
 
 public/
+
+bin/

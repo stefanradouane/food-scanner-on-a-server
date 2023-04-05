@@ -17,7 +17,6 @@
   padding: 15px 10px;
   position: relative;
   transition: 300ms all;
-  //   isolation: isolate;
 
   &:hover &__hover {
     transform: rotateX(0deg) rotateY(180deg) scaleY(1);
@@ -61,20 +60,6 @@
       }
     }
   }
-
-  //   &::after {
-  //     content: '';
-  //   }
-
-  //   &::before {
-  //     content: '';
-  //     transition: 300ms all;
-
-  //     background-repeat: no-repeat;
-
-  //     transform-origin: bottom;
-  //     display: block;
-  //   }
 
   &:hover {
     background: grey;

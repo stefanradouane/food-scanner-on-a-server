@@ -3,10 +3,10 @@
  ********************************************************/
 const express = require('express');
 const compression = require('compression');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 8000;
-
 const routes = require('./routes/routes');
 
 /*******************************************************
@@ -14,14 +14,15 @@ const routes = require('./routes/routes');
  ********************************************************/
 app.use(compression());
 
+// Cache the js and css file on default
+// The SW is an enhancement.
 // Regex must be [filename]-[uuid].[source]
 app.use(/.*\..*/, (req, res, next) => {
   res.setHeader('Cache-Control', 'max-age=365000000, immutable');
   next();
 });
 
-app.use('/public', express.static(__dirname + '/public/'));
-app.use('/', express.static(__dirname + '/'));
+app.use(express.static('./public'));
 
 /*******************************************************
  * Set template engine

@@ -1,4 +1,5 @@
 const CORE_CACHE_VERSION = 'v1';
+// Object containing the files and pages the service worker must cache.
 const CORE_CACHE_ARRAY = [
   {
     name: `files-${CORE_CACHE_VERSION}`,
@@ -35,8 +36,10 @@ const CORE_CACHE_ARRAY = [
 
 let cacheNames = CORE_CACHE_ARRAY.map((cache) => cache.name);
 
+// Install the service worker
+// Anc cache the files defined in the variable CORE_CACHE_ARRAY
 self.addEventListener('install', (e) => {
-  console.log('Install Service Worker');
+  // Install Service Worker
   e.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
@@ -45,43 +48,60 @@ self.addEventListener('install', (e) => {
           if (keys.indexOf(object.name) === -1) {
             // Make new cache
             return caches.open(object.name).then((cache) => {
-              console.log(`caching ${object.name}`);
+              // caching object.name
               return cache.addAll(object.urls);
             });
+            // Object does exist in caches
           } else {
-            console.log(`found ${object.name}`);
+            // found object.name
             return Promise.resolve(true);
           }
         })
       ).then(() => {
-        console.log('done installing');
+        // done installing
         return this.skipWaiting();
       });
     })
   );
 });
+
+// Activate event listener
+// Checks if the caches contains a cache that is not defined in the variable CORE_CACHE_ARRAY
+// After that claim the clients (make sure the page doesn't have to be reloaded before starting to work.)
 self.addEventListener('activate', (e) => {
-  console.log('Activating service worker');
+  // Activate Service Worker
   e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (cacheNames.indexOf(key) === -1) {
-            console.log(`deleting ${key}`);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
+    caches
+      .keys()
+      .then((keys) => {
+        return Promise.all(
+          keys.map((key) => {
+            // Cache is not defined
+            if (cacheNames.indexOf(key) === -1) {
+              // Delete cache
+              return caches.delete(key);
+            }
+          })
+        );
+      })
+      .then(() => {
+        // After activation claim the client
+        clients.claim();
+      })
   );
 });
 
+// Fetch Event listener router
+// This listener checks on the following fetch types:
+// - HTML request
+// - Image request
+// - File request
+// - Source from different origin
+// - */* request (handle front end fetches)
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
-  // console.log(url);
-  // console.log(e.request.headers.get('accept'));
+
   if (isHtmlGetRequest(e.request)) {
-    console.log(url);
     e.respondWith(
       caches
         .open(`pages-${CORE_CACHE_VERSION}`)
@@ -111,25 +131,6 @@ self.addEventListener('fetch', (e) => {
             .open(`pages-${CORE_CACHE_VERSION}`)
             .then((cache) => cache.match('/offline'));
         })
-
-      // caches
-      //   .open(`pages-${CORE_CACHE_VERSION}`)
-      //   .then((cache) => cache.match(e.request.url))
-      //   .then((response) =>
-      //     response
-      //       ? response
-      //       : fetchAndCache(e.request, `pages-${CORE_CACHE_VERSION}`)
-      //   )
-      //   .then((response) => {
-      //     // Fetch new page version
-      //     fetchAndCache(e.request, `pages-${CORE_CACHE_VERSION}`);
-      //     return response;
-      //   })
-      //   .catch((err) => {
-      //     return caches
-      //       .open(`pages-${CORE_CACHE_VERSION}`)
-      //       .then((cache) => cache.match('/offline'));
-      //   })
     );
   } else if (isImageGetRequest(e.request)) {
     e.respondWith(
@@ -139,16 +140,12 @@ self.addEventListener('fetch', (e) => {
         .then((response) => response)
     );
   } else if (isFileGetRequest(e.request)) {
-    console.log('file requested' + e.request.url);
-
     e.respondWith(
       caches
         .open(`files-${CORE_CACHE_VERSION}`)
         .then((cache) => cache.match(e.request.url))
     );
   } else if (new URL(e.request.referrer).origin !== url.origin) {
-    // console.log(url);
-    // console.log(e.request);
     e.respondWith(
       caches
         .open(`web-images-${CORE_CACHE_VERSION}`)
@@ -168,7 +165,6 @@ self.addEventListener('fetch', (e) => {
         })
     );
   } else if (e.request.headers.get('accept') == '*/*') {
-    console.log('other requested' + e.request.url);
     const path = url.pathname + url.search;
     const href = url.href;
     const usedHref = href.replace('&async=true', '');
@@ -190,9 +186,10 @@ self.addEventListener('fetch', (e) => {
             return response;
           })
           .catch((err) => {
+            // Return an error.
+            // The front-end will render an partial.
+            // This part of the code will never be executed with JS disabled (after installation of this SW)
             return err;
-            // Show partial offline
-            // return `<h1 class="title title--h1">An internet error occured</h1>`;
           })
       );
     } else {
@@ -225,25 +222,17 @@ self.addEventListener('fetch', (e) => {
           })
       );
     }
-    console.log(url);
-  } else {
-    console.log(e.request);
   }
 });
 
 /*******************************************************
  * ServiceWorker functions
  ********************************************************/
-function requestType(request) {
-  return isCoreGetRequest(request)
-    ? isCoreGetRequest(request)
-    : isHtmlGetRequest(request)
-    ? isHtmlGetRequest(request)
-    : isImageGetRequest(request)
-    ? isImageGetRequest(request)
-    : false;
-}
-
+/**
+ * Checks if a request is a GET and image request
+ * @param {Object} request The request object
+ * @returns {Boolean} Boolean value indicating whether the request is a GET and image request
+ */
 function isImageGetRequest(request) {
   return CORE_CACHE_ARRAY.map((object) => {
     if (
@@ -258,17 +247,11 @@ function isImageGetRequest(request) {
   }).filter((o) => o)[0];
 }
 
-function fetchAndCache(request, cacheName) {
-  return fetch(request).then((response) => {
-    if (!response.ok) {
-      throw new TypeError('Bad response status');
-    }
-    const clone = response.clone();
-    caches.open(cacheName).then((cache) => cache.put(request, clone));
-    return response;
-  });
-}
-
+/**
+ * Checks if a request is a GET and file request
+ * @param {Object} request The request object
+ * @returns {Boolean} Boolean value indicating whether the request is a GET and file request
+ */
 function isFileGetRequest(request) {
   return CORE_CACHE_ARRAY.map((object) => {
     if (
@@ -285,7 +268,6 @@ function isFileGetRequest(request) {
 
 /**
  * Checks if a request is a GET and HTML request
- *
  * @param {Object} request The request object
  * @returns {Boolean} Boolean value indicating whether the request is a GET and HTML request
  */
@@ -295,7 +277,6 @@ function isHtmlGetRequest(request) {
     request.headers.get('accept') !== null &&
     request.headers.get('accept').includes('text/html')
   ) {
-    console.log('html get request', request.url);
     return true;
   } else {
     return false;
@@ -307,14 +288,12 @@ function isHtmlGetRequest(request) {
  * @param {Object} request The request object
  * @returns {Boolean} Boolean value indicating whether the request is in the core mapping
  */
-
 function isCoreGetRequest(request) {
   CORE_CACHE_ARRAY.forEach((object) => {
     if (
       request.method === 'GET' &&
       object.urls.includes(getPathName(request.url))
     ) {
-      // console.log(object.name);
       return true;
     }
   });
@@ -331,6 +310,12 @@ function getPathName(requestUrl) {
   return url.pathname;
 }
 
+/**
+ * Fetch an image and cache this image as a WebP
+ * @param {string} url the path to the request
+ * @param {string} cacheName the name of the cache directory
+ * @returns {Request}
+ */
 function fetchAndCacheImage(url, cacheName) {
   return fetch(url, {}).then((response) => {
     return response.blob().then((blob) => {
@@ -345,6 +330,23 @@ function fetchAndCacheImage(url, cacheName) {
         });
       });
     });
+  });
+}
+
+/**
+ * Fetch a page and cache this page
+ * @param {string} url the path to the request
+ * @param {string} cacheName the name of the cache directory
+ * @returns {Request}
+ */
+function fetchAndCache(request, cacheName) {
+  return fetch(request).then((response) => {
+    if (!response.ok) {
+      throw new TypeError('Bad response status');
+    }
+    const clone = response.clone();
+    caches.open(cacheName).then((cache) => cache.put(request, clone));
+    return response;
   });
 }
 
