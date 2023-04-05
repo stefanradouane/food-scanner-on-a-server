@@ -107,3 +107,7 @@ dist
 .DS_Store
 DS_Store
 DS_Store/
+
+## Public folder
+
+public/
