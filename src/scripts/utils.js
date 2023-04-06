@@ -1,7 +1,4 @@
-const search = document.querySelector('[data-search]');
-
 export function getPageContent(url) {
-  console.log(url);
   return fetch(url).then((res) => res.text());
 }
 
@@ -44,18 +41,6 @@ export async function onLinkNavigate(callback) {
       },
     });
   });
-}
-
-/**
- * @param {Url} href eg: /producten
- * @returns {Element} <a> with href param href
- */
-export function getLink(href) {
-  const fullLink = new URL(href, location.href).href;
-
-  return [...document.querySelectorAll('a')].find(
-    (link) => link.href === fullLink
-  );
 }
 
 // This helper function returns a View-Transition-like object, even for browsers that don't support view transitions.

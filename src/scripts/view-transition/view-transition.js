@@ -1,10 +1,5 @@
 import { detailPage } from '../detailpage/detailpage.js';
-import {
-  getPageContent,
-  onLinkNavigate,
-  transitionHelper,
-  getLink,
-} from '../utils.js';
+import { getPageContent, onLinkNavigate, transitionHelper } from '../utils.js';
 
 const barcodePath = '/producten/';
 

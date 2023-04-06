@@ -46,6 +46,8 @@ De app maakt dus gebruik van client-server rendering om ervoor te zorgen dat de 
 
 Client-server rendering biedt ook voordelen op het gebied van SEO, omdat zoekmachines gemakkelijker de content van de pagina kunnen crawlen en indexeren. Dit kan leiden tot een betere positie in zoekresultaten en meer organisch verkeer naar de website.
 
+<img src="docs/server-diagram.png" alt="prestatie pwa" width="75%">
+
 De standaard wijze waarop mijn app werkt is door met een HTML pagina een verzoek te doen naar de server. De server doet vervolgens een verzoek naar de [API van Open Food Facts](https://openfoodfacts.github.io/api-documentation). Vervolgens rendered te server een HTML pagina en deze pagina naar de client gestuurd. Jammer genoeg heeft deze aanpak een aantal voordelen en nadelen. Een van de grootste voordelen is dat op het moment dat de pagina naar de client wordt gestuurd dat de pagina klaar is om te gebruiken. Het nadeel is alleen dat de API erg langzaam is. De percieved performance gaat dus omlaag door het met de server te renderen. Ik ga dit probleem oplossen door gebruik te maken van een [service worker](#👷-service-worker).
 
 ## 👷 Service worker
@@ -67,28 +69,19 @@ Service workers zijn een krachtig hulpmiddel voor het bouwen van webapps die net
 
 De service worker is dus de tussenpersoon tussen de server en de client. Ik heb zelf ook een service worker geimplementeerd om te zorgen voor een fijne gebruikerservaring. Ik heb een activity diagram gemaakt om te illustreren hoe de service worker werkt.
 
-<img src="docs/pres-good-list.png" alt="prestatie pwa" width="50%">
-
 #### Activiteiten diagram
 
 Het bijgevoegde activiteiten diagram geeft een overzicht van de verschillende stappen die plaatsvinden bij het laden van de app, inclusief de Service Worker.
 
-```sql
-+----------------+         +-----------------+
-|                |  fetch  |                |
-|   Service      | ------> |    Network     |
-|   Worker       | <------ |    (Online)    |
-|                |         |                |
-+----------------+         +----------------+
-       |                            |
-       |                            |
-       |                            |
-+----------------+         +----------------+
-|                |         |                |
-|      App       |         |     Cache      |
-|                |         |                |
-+----------------+         +----------------+
-```
+<img src="docs/service-diagram.png" alt="prestatie pwa" width="75%">
+
+Load service worker
+
+<img src="docs/service-runtime.png" alt="prestatie pwa" width="75%">
+
+Use service worker
+
+<img src="docs/flowchart.png" alt="prestatie pwa" width="75%">
 
 In dit diagram kun je zien dat de Service Worker, zodra deze is geïnstalleerd en geactiveerd, de netwerkrequests van de app onderschept. Bij een netwerkrequest zoekt de Service Worker eerst in de cache of de gevraagde asset al eerder is opgehaald. Als dit het geval is, stuurt de Service Worker de asset vanuit de cache terug naar de app. Als de asset nog niet in de cache aanwezig is, wordt deze opgehaald vanaf het netwerk en vervolgens gecached door de Service Worker voor toekomstig gebruik, dit word ook wel <em>runtime caching</em> genoemt.
 
@@ -161,22 +154,43 @@ Om de complete tijdsduur van de critical render path te verlagen heb ik de volge
 - Front end requests
 - Loading animations
 
-Naast alles wat ik heb geimplementeerd waren er nog een aantal mogelijke optimalisaties die ik <em>(nog)</em> niet heb uitgevoerd:
-
-- IDK
-- IDK
-
 ##### View transition API
+
+Een van de grootste voordelen van de View Transition API is dat het de "perceived performance" van je app verbetert. Dit betekent dat het de snelheid waarmee je app reageert en de responsiviteit van je app verbetert, waardoor gebruikers minder lang hoeven te wachten op de volgende actie die ze willen uitvoeren.
+
+Dit komt doordat de View Transition API het proces van het laden van de inhoud van de volgende weergave achter de schermen afhandelt, terwijl de huidige weergave nog steeds zichtbaar is. Dit betekent dat gebruikers geen lege schermen of laadsymbolen te zien krijgen, wat hun ervaring naadlozer maakt. Dit kan vooral belangrijk zijn bij het laden van zware afbeeldingen, video's of andere media.
+
+Bovendien biedt de View Transition API meer controle over de animatie-effecten die worden gebruikt bij het overgangen tussen weergaven, waardoor je je app een persoonlijker en unieker gevoel kunt geven. Dit kan resulteren in een betere gebruikerservaring en kan gebruikers helpen zich te onderscheiden van de concurrentie.
+
+Al met al kan het gebruik van de View Transition API een aanzienlijke verbetering betekenen voor de "perceived performance" van je app en dus de gebruikerservaring. Het is zeker de moeite waard om te overwegen om deze API in je app te implementeren en te zien hoe het de prestaties van je app verbetert.
 
 ##### Front end requests
 
+Door de requests op de front-end af te handelen als JS beschikbaar is dan wordt de percieved performance verbeterd. Dit komt omdat de default manier van de browser is dat de pagina volledig word geherladen en nu wordt er alleen een partial herladen.
+
 ##### Loading animations
 
-Uitleg van de view transition api en hoe deze ervoor zorgt dat de percieved performance omhoog gaat
+Door tijdens de verzoeken op de front-end een loading animatie te tonen wordt de percieved performance versneld. Je weet dat de site bezig is in plaats van dat je hoopt dat de site bezig is.
 
 ### Resultaten optimalisaties
 
-Veel foto's van izjen onderzoek.
+SS lighthouse voor optimalisaties
+
+<img src="docs/pres-bad-list.png" alt="prestatie pwa" width="50%">
+
+SS lighthouse na optimalisaties
+
+<img src="docs/pres-good-list.png" alt="prestatie pwa" width="50%">
+
+> Op de schreenshots zijn de listview weergaven met elkaar vergeleken. Door de optimalisaties is de presatie van de app van een score van 88 naar een score van 97 gegaan. Dit kom grotendeels door de `speed index`.
+
+SS lighthouse home page
+
+<img src="docs/pres-home.png" alt="prestatie pwa" width="50%">
+
+SS lighthouse detail page
+
+<img src="docs/pres-detail.png" alt="prestatie pwa" width="50%">
 
 ## :memo: Criteria
 
