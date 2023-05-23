@@ -1,5 +1,8 @@
 const endpoint = require('./endpoint');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
+// import fetch from 'node-fetch';
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 class Api {
   get = async (type, query, page, pageSize) => {
