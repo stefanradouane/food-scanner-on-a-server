@@ -34,6 +34,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "babel-loader": "^9.1.2",
+    "chokidar-cli": "^2.1.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
@@ -42,6 +43,7 @@
     "gulp-line-ending-corrector": "^1.0.3",
     "gulp-rev": "^9.0.0",
     "gulp-rev-css-url": "^0.1.0",
+    "gulp-rev-replace": "^0.4.4",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
@@ -52,9 +54,7 @@
     "rimraf": "^4.4.1",
     "sass": "^1.57.1",
     "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "chokidar-cli": "^2.1.0",
-    "gulp-rev-replace": "^0.4.4"
+    "webpack-cli": "^5.0.1"
   },
   "dependencies": {
     "compression": "^1.7.4",
@@ -63,6 +63,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
+    "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

@@ -1,4 +1,5 @@
 const endpoint = require('./endpoint');
+const fetch = require('node-fetch');
 
 class Api {
   get = async (type, query, page, pageSize) => {
